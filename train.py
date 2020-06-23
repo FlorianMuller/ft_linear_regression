@@ -35,7 +35,7 @@ def main():
     lr.setup_zscore(x)
 
     # Before training
-    print("Starting cost:", lr.cost_(x, y))
+    print("Starting cost:", lr.cost_(x, y), end="\n\n")
     plot_all(x, y, lr)
 
     # Training model
@@ -43,8 +43,14 @@ def main():
 
     # After training
     print("Ending cost:", lr.cost_(x, y))
-    print("Thetas: ", lr.thetas)
+    print("Thetas: ", lr.thetas, end="\n\n")
     plot_all(x, y, lr)
+
+    # Save config in a file
+    params = lr.get_params_()
+    with open("config.mlr", "w") as f:
+        f.write(repr(params))
+    print("-> config.mlr created")
 
 
 if __name__ == "__main__":

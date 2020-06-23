@@ -14,6 +14,9 @@ class MyLinearRegression():
         self.mean = mean
         self.std = std
 
+    def get_params_(self):
+        return self.__dict__
+
     def setup_zscore(self, x):
         if x.ndim == 1:
             x = x.reshape(-1, 1)
@@ -33,7 +36,6 @@ class MyLinearRegression():
         # Use standardisation (or normalisation)
         if self.mean is not None and self.std is not None:
             x = self.zscore(x)
-            print(x)
 
         if (x.size == 0 or y.size == 0 or self.thetas.size == 0
             or x.ndim != 2 or y.ndim != 2 or x.shape[0] != y.shape[0]
