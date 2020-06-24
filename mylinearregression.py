@@ -33,14 +33,14 @@ class MyLinearRegression():
         if y.ndim == 1:
             y = y.reshape(-1, 1)
 
-        # Use standardisation (or normalisation)
-        if self.mean is not None and self.std is not None:
-            x = self.zscore(x)
-
         if (x.size == 0 or y.size == 0 or self.thetas.size == 0
             or x.ndim != 2 or y.ndim != 2 or x.shape[0] != y.shape[0]
                 or x.shape[1] + 1 != self.thetas.shape[0] or y.shape[1] != 1):
             return None
+
+        # Use standardisation (or normalisation)
+        if self.mean is not None and self.std is not None:
+            x = self.zscore(x)
 
         x_prime = np.c_[np.ones(x.shape[0]), x]
         for _ in range(self.max_iter):
@@ -53,13 +53,13 @@ class MyLinearRegression():
         if x.ndim == 1:
             x = x.reshape(-1, 1)
 
-        # Use standardisation (or normalisation)
-        if self.mean is not None and self.std is not None:
-            x = self.zscore(x)
-
         if (x.size == 0 or self.thetas.size == 0
                 or x.ndim != 2 or x.shape[1] + 1 != self.thetas.shape[0]):
             return None
+
+        # Use standardisation (or normalisation)
+        if self.mean is not None and self.std is not None:
+            x = self.zscore(x)
 
         x_prime = np.c_[np.ones(x.shape[0]), x]
         return x_prime @ self.thetas
