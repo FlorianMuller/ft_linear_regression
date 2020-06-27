@@ -6,7 +6,7 @@ from mylinearregression import MyLinearRegression as MyLR
 
 def plot_all(x, y, lr):
     # Line
-    line_x = np.linspace(0, 300000, 1000)
+    line_x = np.linspace(x.min(), x.max(), 1000)
     line_y = lr.predict_(line_x)
     plt.plot(line_x, line_y, "c-", label="Model")
 
@@ -29,17 +29,23 @@ def main():
     x = np.array(data["km"]).reshape(-1, 1)
     y = np.array(data["price"]).reshape(-1, 1)
 
-    lr = MyLR(np.zeros(x.shape[1] + 1), alpha=1e-3, max_iter=50000)
+    # WITHOUT sandardisation (not working)
+    lr = MyLR(np.zeros(x.shape[1] + 1), alpha=1e-10, max_iter=50)
 
-    # Use standardisation/normalisation
-    lr.setup_zscore(x)
+    # WITH sandardisation (working)
+    # lr = MyLR(np.zeros(x.shape[1] + 1), alpha=1e-3, max_iter=10000)
+    # lr.setup_zscore(x)
 
     # Before training
     print("Starting cost:", lr.cost_(x, y), end="\n\n")
-    plot_all(x, y, lr)
+    # plot_all(x, y, lr)
 
     # Training model
-    lr.fit_(x, y)
+    cost_history = lr.fit_(x, y, get_cost=True)
+
+    # Plotting cost evolution
+    plt.plot(cost_history, "m-")
+    plt.show()
 
     # After training
     print("Ending cost:", lr.cost_(x, y))

@@ -27,7 +27,7 @@ class MyLinearRegression():
     def zscore(self, x):
         return (x - self.mean) / self.std
 
-    def fit_(self, x, y):
+    def fit_(self, x, y, get_cost=False):
         if x.ndim == 1:
             x = x.reshape(-1, 1)
         if y.ndim == 1:
@@ -43,11 +43,24 @@ class MyLinearRegression():
             x = self.zscore(x)
 
         x_prime = np.c_[np.ones(x.shape[0]), x]
-        for _ in range(self.max_iter):
-            nabla = (x_prime.T @ ((x_prime @ self.thetas) - y)) / y.shape[0]
+        cost_history = np.empty(self.max_iter + 1)
+
+        for i in range(self.max_iter):
+            y_hat = x_prime @ self.thetas
+
+            # To get cost evolution
+            if get_cost:
+                y_diff = y_hat.flatten() - y.flatten()
+                cost_history[i] = np.dot(y_diff, y_diff) / (2 * y.shape[0])
+
+            nabla = (x_prime.T @ (y_hat - y)) / y.shape[0]
             self.thetas = self.thetas - self.alpha * nabla
 
-        return self.thetas
+        if get_cost:
+            y_hat = x_prime @ self.thetas
+            y_diff = y_hat.flatten() - y.flatten()
+            cost_history[-1] = np.dot(y_diff, y_diff) / (2 * y.shape[0])
+            return cost_history
 
     def predict_(self, x):
         if x.ndim == 1:
