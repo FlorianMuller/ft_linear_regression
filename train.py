@@ -29,16 +29,14 @@ def main():
     x = np.array(data["km"]).reshape(-1, 1)
     y = np.array(data["price"]).reshape(-1, 1)
 
-    # WITHOUT sandardisation (not working)
-    lr = MyLR(np.zeros(x.shape[1] + 1), alpha=1e-10, max_iter=50)
+    lr = MyLR(np.zeros(x.shape[1] + 1), alpha=1e-3, max_iter=10000)
 
-    # WITH sandardisation (working)
-    # lr = MyLR(np.zeros(x.shape[1] + 1), alpha=1e-3, max_iter=10000)
-    # lr.setup_zscore(x)
+    # Standardisation
+    lr.setup_zscore(x)
 
     # Before training
     print("Starting cost:", lr.cost_(x, y), end="\n\n")
-    # plot_all(x, y, lr)
+    plot_all(x, y, lr)
 
     # Training model
     cost_history = lr.fit_(x, y, get_cost=True)
