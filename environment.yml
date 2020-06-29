@@ -1,0 +1,10 @@
+name: ft_linear_regression
+channels:
+  - defaults
+dependencies:
+  - python=3.7.7
+  - numpy
+  - matplotlib
+  - pandas
+prefix: /Users/fmuller/miniconda3/envs/ft_linear_regression
+
