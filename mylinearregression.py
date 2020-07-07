@@ -43,18 +43,23 @@ class MyLinearRegression():
             x = self.zscore(x)
 
         x_prime = np.c_[np.ones(x.shape[0]), x]
-        cost_history = np.empty(self.max_iter + 1)
+        if get_cost:
+            cost_history = np.empty(self.max_iter + 1)
+            for i in range(self.max_iter):
+                y_hat = x_prime @ self.thetas
 
-        for i in range(self.max_iter):
-            y_hat = x_prime @ self.thetas
-
-            # To get cost evolution
-            if get_cost:
+                # To get cost evolution
                 y_diff = y_hat.flatten() - y.flatten()
                 cost_history[i] = np.dot(y_diff, y_diff) / (2 * y.shape[0])
 
-            nabla = (x_prime.T @ (y_hat - y)) / y.shape[0]
-            self.thetas = self.thetas - self.alpha * nabla
+                nabla = (x_prime.T @ (y_hat - y)) / y.shape[0]
+                self.thetas = self.thetas - self.alpha * nabla
+        else:
+            for i in range(self.max_iter):
+                y_hat = x_prime @ self.thetas
+
+                nabla = (x_prime.T @ (y_hat - y)) / y.shape[0]
+                self.thetas = self.thetas - self.alpha * nabla
 
         if get_cost:
             y_hat = x_prime @ self.thetas
